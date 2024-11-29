@@ -1,8 +1,9 @@
 class Animal:
-    def __init__(self, name):
+    def __init__(self, name): 
         self.alive = True  # живой
         self.fed = False  # накормленный
         self.name = name
+
     def eat(self, food):
         if food.edible:
             print(f"{self.name} съел {food.name}")
@@ -11,11 +12,12 @@ class Animal:
             print(f"{self.name} не стал есть {food.name}")
             self.alive = False
 
+
 class Plant:
     def __init__(self, name):
         self.edible = False  # проверяем съедобность
         self.name = name
-        
+
 class Mammal(Animal):
     pass
 
@@ -27,10 +29,23 @@ class Flower(Plant):
         super().__init__(name)
         self.edible = False  # цветок не съедобен
 
+
 class Fruit(Plant):
     def __init__(self, name):
         super().__init__(name)
         self.edible = True  # фрукт съедобен
+
+
+class Duckbill(Mammal, Plant):
+    def __init__(self, name, speed):
+        super().__init__(name)
+        self.speed = speed
+        self._cords = [0, 0, 0]  # Начальные координаты
+
+    def dive_in(self, dz):
+        # Учитываем скорость при изменении координаты z
+        self._cords[2] -= abs(dz) * (self.speed // 2)
+
 
 # животные
 a1 = Predator('Волк с Уолл-Стрит')
