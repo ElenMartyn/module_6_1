@@ -1,75 +1,60 @@
+import random
 class Animal:
-    def __init__(self, name): 
-        self.alive = True  # живой
-        self.fed = False  # накормленный
-        self.name = name
+    live = True
+    sound = None
+    _DEGREE_OF_DANGER = 0
 
-    def eat(self, food):
-        if food.edible:
-            print(f"{self.name} съел {food.name}")
-            self.fed = True
-        else:
-            print(f"{self.name} не стал есть {food.name}")
-            self.alive = False
-
-
-class Plant:
-    def __init__(self, name):
-        self.edible = False  # проверяем съедобность
-        self.name = name
-
-class Mammal(Animal):
-    pass
-
-class Predator(Animal):
-    pass
-
-class Flower(Plant):
-    def __init__(self, name):
-        super().__init__(name)
-        self.edible = False  # цветок не съедобен
-
-
-class Fruit(Plant):
-    def __init__(self, name):
-        super().__init__(name)
-        self.edible = True  # фрукт съедобен
-
-
-class Duckbill(Mammal, Plant):
-    def __init__(self, name, speed):
-        super().__init__(name)
+    def __init__(self, speed):
+        self._cords = [0, 0, 0]
         self.speed = speed
-        self._cords = [0, 0, 0]  # Начальные координаты
 
+    def move(self, dx, dy, dz): # Проверка на изменения координаты Z
+        if self._cords[2] + dz * self.speed < 0:
+            print("It's too deep, I can't dive :(")
+        else:
+            self._cords[0] += dx * self.speed
+            self._cords[1] += dy * self.speed
+            self._cords[2] += dz * self.speed
+
+    def get_cords(self):
+        print(f"X: {self._cords[0]} Y: {self._cords[1]} Z: {self._cords[2]}")
+
+    def attack(self):
+        if self._DEGREE_OF_DANGER < 5:
+            print("Sorry, I'm peaceful :)")
+        else:
+            print("Be careful, I'm attacking you 0_0")
+
+    def speak(self):
+        print(self.sound if self.sound else "Silence")
+
+
+class Bird(Animal):
+    beak = True
+
+    def lay_eggs(self):
+        eggs = random.randint(1, 4)
+        print(f"Here are(is) {eggs} eggs for you")
+
+
+class AquaticAnimal(Animal):
+    _DEGREE_OF_DANGER = 3
     def dive_in(self, dz):
-        # Учитываем скорость при изменении координаты z
-        self._cords[2] -= abs(dz) * (self.speed // 2)
+        self._cords[2] -= abs(dz) * (self.speed // 2)  # Уменьшаем Z координату
 
+class PoisonousAnimal(Animal):
+    _DEGREE_OF_DANGER = 8
 
-# животные
-a1 = Predator('Волк с Уолл-Стрит')
-a2 = Mammal('Хатико')
-a3 = Predator('Бурый медведь')
-a4 = Mammal('Олень Свен')
-# растения
-p1 = Flower('Цветик семицветик')
-p2 = Fruit('Заводной апельсин')
-p3 = Fruit('Яблоко')
+class Duckbill(Bird, AquaticAnimal, PoisonousAnimal):
+    sound = "Click-click-click"
 
-print(a1.name)
-print(p1.name)
-print(a3.name)
-
-print(a1.alive)
-print(a2.fed)
-print(a4.fed)
-
-print('Кушает:')
-a1.eat(p1)
-a2.eat(p2)
-a4.eat(p3)
-
-print(a1.alive)
-print(a2.fed)
-print(a4.fed)
+db = Duckbill(10)
+print(db.live)
+print(db.beak)
+db.speak()
+db.attack()
+db.move(1, 2, 3)         
+db.get_cords()
+db.dive_in(6)
+db.get_cords()           
+db.lay_eggs()
