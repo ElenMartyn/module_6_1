@@ -1,4 +1,5 @@
 import random
+
 class Animal:
     live = True
     sound = None
@@ -8,7 +9,7 @@ class Animal:
         self._cords = [0, 0, 0]
         self.speed = speed
 
-    def move(self, dx, dy, dz): # Проверка на изменения координаты Z
+    def move(self, dx, dy, dz):
         if self._cords[2] + dz * self.speed < 0:
             print("It's too deep, I can't dive :(")
         else:
@@ -28,24 +29,23 @@ class Animal:
     def speak(self):
         print(self.sound if self.sound else "Silence")
 
-
 class Bird(Animal):
     beak = True
 
     def lay_eggs(self):
         eggs = random.randint(1, 4)
         print(f"Here are(is) {eggs} eggs for you")
-
-
+        
 class AquaticAnimal(Animal):
     _DEGREE_OF_DANGER = 3
+
     def dive_in(self, dz):
-        self._cords[2] -= abs(dz) * (self.speed // 2)  # Уменьшаем Z координату
+        self._cords[2] -= abs(dz) * (self.speed // 2)  # Уменьшаем Z координату с учетом скорости
 
 class PoisonousAnimal(Animal):
     _DEGREE_OF_DANGER = 8
 
-class Duckbill(Bird, AquaticAnimal, PoisonousAnimal):
+class Duckbill(AquaticAnimal, Bird, PoisonousAnimal):  # Изменен порядок наследования
     sound = "Click-click-click"
 
 db = Duckbill(10)
@@ -53,8 +53,8 @@ print(db.live)
 print(db.beak)
 db.speak()
 db.attack()
-db.move(1, 2, 3)         
+db.move(1, 2, 3)
 db.get_cords()
 db.dive_in(6)
-db.get_cords()           
+db.get_cords()
 db.lay_eggs()
